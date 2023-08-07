@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/del-escano.iml" filepath="$PROJECT_DIR$/.idea/del-escano.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/del-escano-api.iml" filepath="$PROJECT_DIR$/.idea/del-escano-api.iml" />
     </modules>
   </component>
 </project>
