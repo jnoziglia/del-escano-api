@@ -9,7 +9,7 @@ class Seat:
         self.reset_seats()
         for i in range(seat_count):
             self.parties.sort(key=lambda party: party.votes / (party.seats + 1), reverse=True)
-            self.parties[0].set_seat(self.parties[0].seats + 1)
+            self.parties[0].seats = self.parties[0].seats + 1
         return self.parties
 
     def set_parties(self, parties):
