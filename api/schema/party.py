@@ -1,11 +1,13 @@
-from marshmallow import Schema, fields, post_load
+from marshmallow import fields, post_load
+from api.ext import ma
 from api.model.party import Party
 
 
-class PartySchema(Schema):
-    name = fields.Str()
-    votes = fields.Int()
-    seats = fields.Int()
+class PartySchema(ma.Schema):
+    id = fields.Integer(dump_only=True)
+    name = fields.String()
+    votes = fields.Integer()
+    seats = fields.Integer()
 
     @post_load
     def make_party(self, data, **kwargs):
