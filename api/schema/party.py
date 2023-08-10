@@ -12,3 +12,4 @@ class PartySchema(ma.Schema):
     @post_load
     def make_party(self, data, **kwargs):
         return Party(**data)
+
