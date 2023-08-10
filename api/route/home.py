@@ -1,6 +1,8 @@
 from flask import jsonify, request, Blueprint
 from api.schema.party import PartySchema
 from api.model.party import Party
+from api.schema.history import HistorySchema
+from api.model.history import History
 
 app_file1 = Blueprint('app_file1', __name__)
 
@@ -8,7 +10,7 @@ app_file1 = Blueprint('app_file1', __name__)
 @app_file1.route("/parties", methods=['GET'])
 def get_parties():
     parties = Party.get_all()
-    schema = PartySchema(many=True)
+    schema = PartySchema(many=True, only=("name", "votes"))
     result = schema.dump(parties)
     return jsonify(result)
 
@@ -37,14 +39,42 @@ def edit_party(id):
     return resp, 204
 
 
+@app_file1.route("/parties/<id>", methods=['DELETE'])
+def delete_party(id):
+    party = Party.get_by_id(id)
+    if party:
+        party.delete()
+    return '', 204
+
+
 @app_file1.route("/seats", methods=['GET'])
 def get_seats():
     parties = Party.get_all()
     schema = PartySchema(many=True)
-    for i in range(int(request.args.get('seat_count'))):
+    history_schema = HistorySchema()
+    seat_count = int(request.args.get('seat_count'))
+    for i in range(seat_count):
         quot_list = list(map(lambda party: party.calculate_dhont_quot(), parties))
         max_value = max(quot_list)
         max_index = quot_list.index(max_value)
         parties[max_index].seats += 1
     result = schema.dump(parties)
+    history = History(seat_count=seat_count, result=result)
+    history.save()
     return jsonify(result)
+
+
+@app_file1.route("/history", methods=['GET'])
+def get_history():
+    history = History.get_all()
+    schema = HistorySchema(many=True)
+    result = schema.dump(history)
+    return jsonify(result)
+
+
+@app_file1.route("/history/<id>", methods=['DELETE'])
+def delete_history(id):
+    history = History.get_by_id(id)
+    if history:
+        history.delete()
+    return '', 204
