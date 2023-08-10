@@ -11,5 +11,13 @@ class Party(db.Model, BaseModelMixin):
         self.votes = votes
         self.seats = 0
 
+    @db.orm.reconstructor
+    def init_on_load(self):
+        self.seats = 0
+
     def __repr__(self):
         return '<Party(name={self.name!r})>'.format(self=self)
+
+    def calculate_dhont_quot(self):
+        quot = self.votes / (self.seats + 1)
+        return quot

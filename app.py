@@ -35,4 +35,4 @@ from api.route.home import app_file1
 
 app.register_blueprint(app_file1)
 
-register_error_handlers(app)
+# register_error_handlers(app)
