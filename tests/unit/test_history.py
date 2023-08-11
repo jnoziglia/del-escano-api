@@ -1,3 +1,6 @@
+from api.schema import history
+
+
 def test_get_empty_history(client):
     response = client.get('/history')
     assert response.status_code == 200

@@ -18,7 +18,7 @@ def get_parties():
 @party_bp.route("/parties/<id>", methods=['GET'])
 def get_party(id):
     party = Party.get_by_id(id)
-    result = parties_schema.dump(party)
+    result = party_schema.dump(party)
     return jsonify(result)
 
 

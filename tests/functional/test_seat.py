@@ -1,3 +1,6 @@
+import pytest
+
+
 def test_calculate_seats(client, populate_party):
     response = client.get('/history')
     assert response.status_code == 200
@@ -14,3 +17,8 @@ def test_calculate_seats(client, populate_party):
     response = client.get('/history')
     assert response.status_code == 200
     assert len(response.json) == 1
+
+
+def test_get_seats_no_parties(client):
+    with pytest.raises(ValueError):
+        client.get('/seats?seat_count=1')

@@ -46,6 +46,7 @@ def populate_party(app):
         ]
         db.session.add_all(parties)
         db.session.commit()
+        return parties
 
 
 @pytest.fixture
