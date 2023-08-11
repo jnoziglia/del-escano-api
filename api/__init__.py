@@ -5,6 +5,7 @@ from api.route.party import party_bp
 from api.route.history import history_bp
 from api.route.seats import seats_bp
 from api.db import db
+from api.common.error_handling import ObjectNotFound, AppErrorBaseClass
 
 
 def create_app(test_config=None):
@@ -25,7 +26,7 @@ def create_app(test_config=None):
     app.register_blueprint(history_bp)
     app.register_blueprint(seats_bp)
 
-    # register_error_handlers(app)
+    register_error_handlers(app)
 
     # ensure the instance folder exists
     try:
@@ -52,3 +53,11 @@ def register_error_handlers(app):
     @app.errorhandler(404)
     def handle_404_error(e):
         return jsonify({'msg': 'Not Found error'}), 404
+
+    @app.errorhandler(AppErrorBaseClass)
+    def handle_app_base_error(e):
+        return jsonify({'msg': str(e)}), 500
+
+    @app.errorhandler(ObjectNotFound)
+    def handle_object_not_found_error(e):
+        return jsonify({'msg': str(e)}), 404

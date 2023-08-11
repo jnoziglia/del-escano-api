@@ -2,6 +2,7 @@ from flask import jsonify, request, Blueprint
 from api.schema.party import PartySchema
 from api.model.party import Party
 from api.model.history import History
+from api.common.error_handling import ObjectNotFound
 
 seats_bp = Blueprint('seats_bp', __name__)
 party_fields = ('name', 'votes', 'seats')
@@ -13,7 +14,7 @@ def get_seats():
     seat_count = int(request.args.get('seat_count'))
     parties = Party.get_all()
     if len(parties) == 0:
-        raise ValueError('No parties')
+        raise ObjectNotFound('There are no parties to calculate seats')
     for i in range(seat_count):
         quot_list = list(map(lambda party: party.calculate_dhont_quot(), parties))
         max_value = max(quot_list)

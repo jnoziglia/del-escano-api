@@ -1,4 +1,3 @@
-import pytest
 
 
 def test_calculate_seats(client, populate_party):
@@ -20,5 +19,6 @@ def test_calculate_seats(client, populate_party):
 
 
 def test_get_seats_no_parties(client):
-    with pytest.raises(ValueError):
-        client.get('/seats?seat_count=1')
+    response = client.get('/seats?seat_count=1')
+    assert response.status_code == 404
+    assert response.json == {'msg': 'There are no parties to calculate seats'}

@@ -1,6 +1,3 @@
-import pytest
-
-
 def test_add_party(client):
     response = client.post('/parties', json={
         'name': 'test',
