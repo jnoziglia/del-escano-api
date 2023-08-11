@@ -10,7 +10,7 @@ app_file1 = Blueprint('app_file1', __name__)
 @app_file1.route("/parties", methods=['GET'])
 def get_parties():
     parties = Party.get_all()
-    schema = PartySchema(many=True, only=("name", "votes"))
+    schema = PartySchema(many=True, only=("id", "name", "votes"))
     result = schema.dump(parties)
     return jsonify(result)
 
@@ -50,23 +50,19 @@ def delete_party(id):
 @app_file1.route("/seats", methods=['GET'])
 def get_seats():
     parties = Party.get_all()
-    try:
-        if len(parties) == 0:
-            raise ValueError('No parties')
-    except ValueError as e:
-        return 'No parties', 500
-    else:
-        schema = PartySchema(many=True)
-        seat_count = int(request.args.get('seat_count'))
-        for i in range(seat_count):
-            quot_list = list(map(lambda party: party.calculate_dhont_quot(), parties))
-            max_value = max(quot_list)
-            max_index = quot_list.index(max_value)
-            parties[max_index].seats += 1
-        result = schema.dump(parties)
-        history = History(seat_count=seat_count, result=result)
-        history.save()
-        return jsonify(result)
+    if len(parties) == 0:
+        raise ValueError('No parties')
+    schema = PartySchema(many=True, only=("name", "votes", "seats"))
+    seat_count = int(request.args.get('seat_count'))
+    for i in range(seat_count):
+        quot_list = list(map(lambda party: party.calculate_dhont_quot(), parties))
+        max_value = max(quot_list)
+        max_index = quot_list.index(max_value)
+        parties[max_index].seats += 1
+    result = schema.dump(parties)
+    history = History(seat_count=seat_count, result=result)
+    history.save()
+    return jsonify(result)
 
 
 @app_file1.route("/history", methods=['GET'])
