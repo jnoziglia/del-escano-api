@@ -14,12 +14,8 @@ class BaseModelMixin:
 
     @classmethod
     def get_all(cls):
-        return cls.query.all()
+        return db.session.scalars(db.select(cls)).all()
 
     @classmethod
     def get_by_id(cls, id):
-        return cls.query.get(id)
-
-    @classmethod
-    def simple_filter(cls, **kwargs):
-        return cls.query.filter_by(**kwargs).all()
+        return db.get_or_404(cls, id)
