@@ -1,7 +1,9 @@
 import os
 from flask import Flask, jsonify
 from api.ext import ma, migrate
-from api.route.home import app_file1
+from api.route.party import party_bp
+from api.route.history import history_bp
+from api.route.seats import seats_bp
 from api.db import db
 
 
@@ -19,7 +21,9 @@ def create_app(test_config=None):
     ma.init_app(app)
     migrate.init_app(app, db)
 
-    app.register_blueprint(app_file1)
+    app.register_blueprint(party_bp)
+    app.register_blueprint(history_bp)
+    app.register_blueprint(seats_bp)
 
     # register_error_handlers(app)
 
