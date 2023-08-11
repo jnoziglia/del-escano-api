@@ -17,16 +17,16 @@ def get_parties():
 
 @app_file1.route("/parties", methods=['POST'])
 def add_party():
-    schema = PartySchema()
+    schema = PartySchema(only=("id", "name", "votes"))
     party = schema.load(request.get_json())
     party.save()
     resp = schema.dump(party)
-    return resp, 204
+    return resp, 201
 
 
 @app_file1.route("/parties/<id>", methods=['PUT'])
 def edit_party(id):
-    schema = PartySchema()
+    schema = PartySchema(only=("id", "name", "votes"))
     party = Party.get_by_id(id)
     party_json = request.get_json()
     if party:
@@ -36,7 +36,7 @@ def edit_party(id):
         party = schema.load(party_json)
     party.save()
     resp = schema.dump(party)
-    return resp, 204
+    return resp, 201
 
 
 @app_file1.route("/parties/<id>", methods=['DELETE'])
@@ -50,18 +50,23 @@ def delete_party(id):
 @app_file1.route("/seats", methods=['GET'])
 def get_seats():
     parties = Party.get_all()
-    schema = PartySchema(many=True)
-    history_schema = HistorySchema()
-    seat_count = int(request.args.get('seat_count'))
-    for i in range(seat_count):
-        quot_list = list(map(lambda party: party.calculate_dhont_quot(), parties))
-        max_value = max(quot_list)
-        max_index = quot_list.index(max_value)
-        parties[max_index].seats += 1
-    result = schema.dump(parties)
-    history = History(seat_count=seat_count, result=result)
-    history.save()
-    return jsonify(result)
+    try:
+        if len(parties) == 0:
+            raise ValueError('No parties')
+    except ValueError as e:
+        return 'No parties', 500
+    else:
+        schema = PartySchema(many=True)
+        seat_count = int(request.args.get('seat_count'))
+        for i in range(seat_count):
+            quot_list = list(map(lambda party: party.calculate_dhont_quot(), parties))
+            max_value = max(quot_list)
+            max_index = quot_list.index(max_value)
+            parties[max_index].seats += 1
+        result = schema.dump(parties)
+        history = History(seat_count=seat_count, result=result)
+        history.save()
+        return jsonify(result)
 
 
 @app_file1.route("/history", methods=['GET'])
