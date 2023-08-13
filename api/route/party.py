@@ -1,6 +1,7 @@
 from flask import request, Blueprint
 from api.schema.party import PartySchema
 from api.model.party import Party
+from auth_middleware import token_required
 
 party_bp = Blueprint('party_bp', __name__)
 party_fields = ('id', 'name', 'votes')
@@ -9,21 +10,24 @@ parties_schema = PartySchema(many=True, only=party_fields)
 
 
 @party_bp.route("/parties", methods=['GET'])
-def get_parties():
+@token_required
+def get_parties(current_user):
     parties = Party.get_all()
     result = parties_schema.dump(parties)
     return result
 
 
 @party_bp.route("/parties/<id>", methods=['GET'])
-def get_party(id):
+@token_required
+def get_party(current_user, id):
     party = Party.get_by_id(id)
     result = party_schema.dump(party)
     return result
 
 
 @party_bp.route("/parties", methods=['POST'])
-def add_party():
+@token_required
+def add_party(current_user):
     party = party_schema.load(request.get_json())
     party.save()
     resp = party_schema.dump(party)
@@ -31,7 +35,8 @@ def add_party():
 
 
 @party_bp.route("/parties/<id>", methods=['PUT'])
-def edit_party(id):
+@token_required
+def edit_party(current_user, id):
     party = Party.get_by_id(id)
     party_json = request.get_json()
     party.name = party_json['name'] if 'name' in party_json else party.name
@@ -42,7 +47,8 @@ def edit_party(id):
 
 
 @party_bp.route("/parties/<id>", methods=['DELETE'])
-def delete_party(id):
+@token_required
+def delete_party(current_user, id):
     party = Party.get_by_id(id)
     if party:
         party.delete()

@@ -3,6 +3,7 @@ from api.schema.party import PartySchema
 from api.model.party import Party
 from api.model.history import History
 from api.common.error_handling import *
+from auth_middleware import token_required
 
 seats_bp = Blueprint('seats_bp', __name__)
 party_fields = ('name', 'votes', 'seats')
@@ -10,7 +11,8 @@ parties_schema = PartySchema(many=True, only=party_fields)
 
 
 @seats_bp.route("/seats", methods=['GET'])
-def get_seats():
+@token_required
+def get_seats(current_user):
     try:
         seat_count = int(request.args.get('seat_count'))
     except TypeError:

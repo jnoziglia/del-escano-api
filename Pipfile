@@ -12,6 +12,7 @@ flask-migrate = "*"
 marshmallow-sqlalchemy = "*"
 pytest = "*"
 coverage = "*"
+pyjwt = "*"
 
 [dev-packages]
 
