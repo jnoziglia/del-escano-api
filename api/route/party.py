@@ -1,4 +1,4 @@
-from flask import jsonify, request, Blueprint
+from flask import request, Blueprint
 from api.schema.party import PartySchema
 from api.model.party import Party
 

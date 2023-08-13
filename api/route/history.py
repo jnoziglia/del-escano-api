@@ -1,4 +1,4 @@
-from flask import jsonify, Blueprint
+from flask import Blueprint
 from api.schema.history import HistorySchema
 from api.model.history import History
 
