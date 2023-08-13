@@ -2,7 +2,7 @@ from flask import jsonify, request, Blueprint
 from api.schema.party import PartySchema
 from api.model.party import Party
 from api.model.history import History
-from api.common.error_handling import ObjectNotFound
+from api.common.error_handling import *
 
 seats_bp = Blueprint('seats_bp', __name__)
 party_fields = ('name', 'votes', 'seats')
@@ -11,7 +11,10 @@ parties_schema = PartySchema(many=True, only=party_fields)
 
 @seats_bp.route("/seats", methods=['GET'])
 def get_seats():
-    seat_count = int(request.args.get('seat_count'))
+    try:
+        seat_count = int(request.args.get('seat_count'))
+    except TypeError:
+        raise BadRequest('Missing or invalid seat_count query parameter')
     parties = Party.get_all()
     if len(parties) == 0:
         raise ObjectNotFound('There are no parties to calculate seats')

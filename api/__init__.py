@@ -5,7 +5,7 @@ from api.route.party import party_bp
 from api.route.history import history_bp
 from api.route.seats import seats_bp
 from api.db import db
-from api.common.error_handling import ObjectNotFound, AppErrorBaseClass
+from api.common.error_handling import *
 
 
 def create_app(test_config=None):
@@ -68,3 +68,7 @@ def register_error_handlers(app):
     @app.errorhandler(ObjectNotFound)
     def handle_object_not_found_error(e):
         return jsonify({'msg': str(e)}), 404
+
+    @app.errorhandler(BadRequest)
+    def handle_bad_request_error(e):
+        return jsonify({'msg': str(e)}), 400
