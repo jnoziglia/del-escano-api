@@ -19,3 +19,11 @@ class BaseModelMixin:
     @classmethod
     def get_by_id(cls, id):
         return db.get_or_404(cls, id)
+
+    @classmethod
+    def simple_filter(cls, **kwargs):
+        return cls.query.filter_by(**kwargs).all()
+
+    @classmethod
+    def simple_filter_one(cls, **kwargs):
+        return cls.query.filter_by(**kwargs).first()

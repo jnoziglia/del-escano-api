@@ -14,7 +14,8 @@ def app():
     app = create_app(test_config={
         'SQLALCHEMY_DATABASE_URI': 'sqlite:///:memory:',
         'SQLALCHEMY_TRACK_MODIFICATIONS': False,
-        'TESTING': True
+        'TESTING': True,
+        'DEBUG': False
     })
     with app.app_context():
         db.init_app(app)

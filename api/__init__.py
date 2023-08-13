@@ -4,6 +4,7 @@ from api.ext import ma, migrate
 from api.route.party import party_bp
 from api.route.history import history_bp
 from api.route.seats import seats_bp
+from api.route.user import user_bp
 from api.db import db
 from api.common.error_handling import *
 
@@ -31,6 +32,7 @@ def create_app(test_config=None):
     app.register_blueprint(party_bp)
     app.register_blueprint(history_bp)
     app.register_blueprint(seats_bp)
+    app.register_blueprint(user_bp)
 
     if not app.config['DEBUG']:
         register_error_handlers(app)
