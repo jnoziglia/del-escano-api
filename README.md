@@ -22,15 +22,17 @@ Del EsCaño es una API que permite calcular cuantos escaños le corresponden a c
 ##### Description
 This endpoint returns all parties.
 ##### Parameters
-No parameters
-##### Response example
+None
+##### Response
 ```json
 [
     {
+        "id": 1,
         "name": "PartyA",
         "votes": 100000
     },
     {
+        "id": 2,
         "name": "PartyB",
         "votes": 50000
     }
@@ -40,8 +42,6 @@ No parameters
 ##### Description
 This endpoint adds a new party.
 ##### Parameters
-No parameters
-##### Request example
 ```json
 {
     "name": "PartyA",
@@ -51,60 +51,40 @@ No parameters
 ##### Response
 ```json
 {
-    "message": "Lista agregada exitosamente",
-    "data": {
-        "_id": "5d0f1b3b1c9d440000d1c9d4",
-        "name": "Partido de la U",
-        "votes": 100000,
-        "createdAt": "2019-06-23T20:54:03.000Z",
-        "updatedAt": "2019-06-23T20:54:03.000Z",
-        "__v": 0
-    }
+    "id": 1,
+    "name": "PartyA",
+    "votes": 100000
 }
 ```
 #### GET /parties/:partyId
 ##### Description
 This endpoint returns a single party.
 ##### Parameters
-Id of the party to be returned
-##### Response example
+None
+##### Response
 ```json
 {
-    "message": "Lista obtenida exitosamente",
-    "data": {
-        "_id": "5d0f1b3b1c9d440000d1c9d4",
-        "name": "Partido de la U",
-        "votes": 100000,
-        "createdAt": "2019-06-23T20:54:03.000Z",
-        "updatedAt": "2019-06-23T20:54:03.000Z",
-        "__v": 0
-    }
+    "id": 1,
+    "name": "PartyA",
+    "votes": 100000
 }
 ```
 #### PUT /parties/:partyId
 ##### Description
 This endpoint updates a single party.
 ##### Parameters
-Id of the party to be updated
-##### Request example
 ```json
 {
-    "name": "PartyA",
-    "votes": 100000
+    "name": "PartyA2",
+    "votes": 200000
 }
 ```
-##### Response example
+##### Response
 ```json
 {
-    "message": "Lista actualizada exitosamente",
-    "data": {
-        "_id": "5d0f1b3b1c9d440000d1c9d4",
-        "name": "Partido de la U",
-        "votes": 100000,
-        "createdAt": "2019-06-23T20:54:03.000Z",
-        "updatedAt": "2019-06-23T20:54:03.000Z",
-        "__v": 0
-    }
+    "id": 1,
+    "name": "PartyA2",
+    "votes": 200000
 }
 ```
 #### DELETE /parties/:partyId
@@ -112,42 +92,30 @@ Id of the party to be updated
 This endpoint deletes a single party.
 ##### Parameters
 Id of the party to be deleted
-##### Response example
+##### Response
 ```json
-{
-    "message": "Lista eliminada exitosamente",
-    "data": {
-        "_id": "5d0f1b3b1c9d440000d1c9d4",
-        "name": "Partido de la U",
-        "votes": 100000,
-        "createdAt": "2019-06-23T20:54:03.000Z",
-        "updatedAt": "2019-06-23T20:54:03.000Z",
-        "__v": 0
-    }
-}
+
 ```
 #### GET /seats
 ##### Description
 This endpoint calculates the distribution of seats.
 ##### Parameters
-Number of seats to be distributed
+Number of seats to be distributed must be sent in the query string. For example: 
+```/seats?seat_count=7``` will calculate the distribution of 7 seats.
 ##### Response example
 ```json
-{
-    "message": "Cálculo realizado exitosamente",
-    "data": [
-        {
-            "name": "PartyA",
-            "votes": 100000,
-            "seats": 5
-        },
-        {
-            "name": "PartyB",
-            "votes": 50000,
-            "seats": 2
-        }
-    ]
-}
+[
+    {
+        "name": "PartyA",
+        "votes": 100000,
+        "seats": 5
+    },
+    {
+        "name": "PartyB",
+        "votes": 50000,
+        "seats": 2
+    }
+]
 ```
 #### GET /history
 ##### Description
@@ -156,25 +124,22 @@ This endpoint returns the history of calculations.
 No parameters
 ##### Response example
 ```json
-{
-    "message": "Historial obtenido exitosamente",
-    "data": [
-        {
-            "_id": "5d0f1b3b1c9d440000d1c9d4",
-            "name": "Partido de la U",
-            "votes": 100000,
-            "createdAt": "2019-06-23T20:54:03.000Z",
-            "updatedAt": "2019-06-23T20:54:03.000Z",
-            "__v": 0
-        },
-        {
-            "_id": "5d0f1b3b1c9d440000d1c9d4",
-            "name": "Partido de la U",
-            "votes": 100000,
-            "createdAt": "2019-06-23T20:54:03.000Z",
-            "updatedAt": "2019-06-23T20:54:03.000Z",
-            "__v": 0
-        }
-    ]
-}
+[
+    {
+        "created_at": "2023-13-08T00:00:00.000Z",
+        "id": "1",
+        "result": [
+            {
+                "name": "PartyA",
+                "votes": 100000,
+                "seats": 5
+            },
+            {
+                "name": "PartyB",
+                "votes": 50000,
+                "seats": 2
+            }
+        ]
+    }
+]
 ```
