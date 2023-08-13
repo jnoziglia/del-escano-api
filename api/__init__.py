@@ -10,7 +10,13 @@ from api.common.error_handling import ObjectNotFound, AppErrorBaseClass
 
 def create_app(test_config=None):
     # create and configure the app
-    app = Flask(__name__)
+    app = Flask(__name__, instance_relative_config=True)
+
+    # Load the default configuration
+    app.config.from_object('config.default')
+
+    # Load the file specified by the APP_CONFIG_FILE environment variable
+    # Variables defined here will override those in the default configuration
     app.config.from_envvar('APP_CONFIG_FILE')
 
     if test_config is None:

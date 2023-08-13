@@ -1,7 +1,8 @@
 FROM python:alpine3.18
 
 # set environment variables
-ENV FLASK_DEBUG True
+ENV APP_CONFIG_FILE /usr/src/app/config/production.py
+ENV FLASK_APP app.py
 
 # install python dependencies
 RUN apk update
@@ -18,7 +19,6 @@ COPY api ./api
 COPY config ./config
 
 RUN chmod +x ./bootstrap.sh
-ENV FLASK_APP ./app.py
 
 # Install API dependencies
 RUN pipenv install --system --deploy
