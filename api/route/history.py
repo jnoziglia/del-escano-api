@@ -10,4 +10,4 @@ history_schema = HistorySchema(many=True)
 def get_history():
     history = History.get_all()
     result = history_schema.dump(history)
-    return jsonify(result)
+    return result

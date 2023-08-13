@@ -23,4 +23,4 @@ def get_seats():
     result = parties_schema.dump(parties)
     history = History(seat_count=seat_count, result=result)
     history.save()
-    return jsonify(result)
+    return result

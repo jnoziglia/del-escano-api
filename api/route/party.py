@@ -12,14 +12,14 @@ parties_schema = PartySchema(many=True, only=party_fields)
 def get_parties():
     parties = Party.get_all()
     result = parties_schema.dump(parties)
-    return jsonify(result)
+    return result
 
 
 @party_bp.route("/parties/<id>", methods=['GET'])
 def get_party(id):
     party = Party.get_by_id(id)
     result = party_schema.dump(party)
-    return jsonify(result)
+    return result
 
 
 @party_bp.route("/parties", methods=['POST'])
