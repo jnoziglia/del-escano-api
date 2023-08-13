@@ -11,7 +11,7 @@ from api.common.error_handling import ObjectNotFound, AppErrorBaseClass
 def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__)
-    app.config.from_object(os.getenv('APP_SETTINGS_MODULE'))
+    app.config.from_envvar('APP_CONFIG_FILE')
 
     if test_config is None:
         db.init_app(app)
