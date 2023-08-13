@@ -32,7 +32,8 @@ def create_app(test_config=None):
     app.register_blueprint(history_bp)
     app.register_blueprint(seats_bp)
 
-    register_error_handlers(app)
+    if not app.config['DEBUG']:
+        register_error_handlers(app)
 
     # ensure the instance folder exists
     try:
