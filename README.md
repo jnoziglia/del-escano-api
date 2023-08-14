@@ -210,7 +210,7 @@ Cantidad de escaños a distribuir. Por ejemplo:
 * La respuesta incluye la fecha de creación, el id y el resultado de cada cálculo.
 ##### Parámetros
 Ninguno
-##### Respuesta example
+##### Respuesta
 ```json
 [
     {

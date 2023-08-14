@@ -1,3 +1,4 @@
+from datetime import datetime, timedelta
 from flask import request, Blueprint, current_app
 from api.schema.user import UserSchema
 from api.model.user import User
@@ -19,9 +20,9 @@ def login():
     user = User.login(user_json['email'], user_json['password'])
     if user:
         try:
-            # token should expire after 24 hrs
             token = jwt.encode(
-                {"user_id": user.id},
+                {"user_id": user.id,
+                 "exp": datetime.utcnow() + timedelta(hours=1)},
                 current_app.config["SECRET_KEY"],
                 algorithm="HS256"
             )
