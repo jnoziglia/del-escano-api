@@ -1,12 +1,9 @@
 from api import create_app, db
 from api.model.party import Party
 from api.model.history import History
+from api.model.user import User
 import pytest
-
-
-def tear_down():
-    db.session.remove()
-    db.drop_all()
+import jwt
 
 
 @pytest.fixture
@@ -15,14 +12,13 @@ def app():
         'SQLALCHEMY_DATABASE_URI': 'sqlite:///:memory:',
         'SQLALCHEMY_TRACK_MODIFICATIONS': False,
         'TESTING': True,
-        'DEBUG': False
+        'DEBUG': False,
+        'SQLALCHEMY_ECHO': False
     })
     with app.app_context():
         db.init_app(app)
         db.create_all()
     yield app
-    with app.app_context():
-        tear_down()
 
 
 @pytest.fixture
@@ -62,3 +58,17 @@ def populate_history(app):
                           ])
         db.session.add(history)
         db.session.commit()
+
+
+@pytest.fixture
+def token(app):
+    with app.app_context():
+        user = User(email='test@test.com', password='test')
+        db.session.add(user)
+        db.session.commit()
+        token = jwt.encode(
+            {"user_id": user.id},
+            app.config["SECRET_KEY"],
+            algorithm="HS256"
+        )
+    return token
