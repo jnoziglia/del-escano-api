@@ -14,6 +14,7 @@ WORKDIR /usr/src/app
 COPY Pipfile ./
 COPY Pipfile.lock ./
 COPY bootstrap.sh ./
+COPY auth_middleware.py ./
 COPY app.py ./
 COPY api ./api
 COPY config ./config
