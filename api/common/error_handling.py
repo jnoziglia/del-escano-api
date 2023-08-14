@@ -12,3 +12,7 @@ class BadRequest(AppErrorBaseClass):
 
 class ObjectAlreadyExists(AppErrorBaseClass):
     pass
+
+
+class Unauthorized(AppErrorBaseClass):
+    pass

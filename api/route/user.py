@@ -2,7 +2,8 @@ from flask import request, Blueprint, current_app
 from api.schema.user import UserSchema
 from api.model.user import User
 import jwt
-from datetime import datetime, timedelta
+from api.common.error_handling import ObjectNotFound, ObjectAlreadyExists, BadRequest
+from marshmallow import ValidationError
 
 user_bp = Blueprint('user_bp', __name__)
 user_schema = UserSchema()
@@ -11,6 +12,10 @@ user_schema = UserSchema()
 @user_bp.route("/users/login", methods=['POST'])
 def login():
     user_json = request.get_json()
+    try:
+        user_obj = user_schema.load(user_json)
+    except ValidationError as e:
+        raise BadRequest('Invalid data to login')
     user = User.login(user_json['email'], user_json['password'])
     if user:
         try:
@@ -30,14 +35,17 @@ def login():
                 "message": str(e)
             }, 500
     else:
-        return 'User not found', 404
+        raise ObjectNotFound('User not found')
 
 
 @user_bp.route("/users", methods=['POST'])
 def add_user():
-    user = user_schema.load(request.get_json())
+    try:
+        user = user_schema.load(request.get_json())
+    except ValidationError as e:
+        raise BadRequest('Invalid data to create a user')
     if user.create(user):
         resp = user_schema.dump(user)
         return resp, 201
     else:
-        return 'User already exists', 409
+        raise ObjectAlreadyExists('User already exists')

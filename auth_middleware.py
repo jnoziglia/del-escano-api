@@ -3,6 +3,7 @@ import jwt
 from flask import request, abort
 from flask import current_app
 from api.model.user import User
+from api.common.error_handling import Unauthorized
 
 
 def token_required(f):
@@ -12,24 +13,15 @@ def token_required(f):
         if "Authorization" in request.headers:
             token = request.headers["Authorization"]
         if not token:
-            return {
-                "message": "Authentication Token is missing!",
-                "data": None,
-                "error": "Unauthorized"
-            }, 401
+            raise Unauthorized("Authentication Token is missing")
         try:
             data = jwt.decode(token, current_app.config["SECRET_KEY"], algorithms=["HS256"])
             current_user = User.get_by_id(data["user_id"])
             if current_user is None:
-                return {
-                    "message": "Invalid Authentication token!",
-                    "data": None,
-                    "error": "Unauthorized"
-                }, 401
+                raise Unauthorized("Invalid Authentication token")
         except Exception as e:
             return {
                 "message": "Something went wrong",
-                "data": None,
                 "error": str(e)
             }, 500
 

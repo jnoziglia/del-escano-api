@@ -3,6 +3,7 @@ from api.schema.party import PartySchema
 from api.model.party import Party
 from auth_middleware import token_required
 from api.common.error_handling import *
+from marshmallow import ValidationError
 
 party_bp = Blueprint('party_bp', __name__)
 party_fields = ('id', 'name', 'votes')
@@ -29,7 +30,10 @@ def get_party(current_user, id):
 @party_bp.route("/parties", methods=['POST'])
 @token_required
 def add_party(current_user):
-    party = party_schema.load(request.get_json())
+    try:
+        party = party_schema.load(request.get_json())
+    except ValidationError as e:
+        raise BadRequest('Invalid data to edit a party')
     if party.already_exists():
         raise ObjectAlreadyExists('Party already exists')
     party.save()
@@ -44,6 +48,10 @@ def edit_party(current_user, id):
     party_json = request.get_json()
     party.name = party_json['name'] if 'name' in party_json else party.name
     party.votes = party_json['votes'] if 'votes' in party_json else party.votes
+    try:
+        party_obj = party_schema.load(request.get_json())
+    except ValidationError as e:
+        raise BadRequest('Invalid data to edit a party')
     party.save()
     resp = party_schema.dump(party)
     return resp, 201

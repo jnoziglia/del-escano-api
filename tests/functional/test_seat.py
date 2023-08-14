@@ -21,4 +21,7 @@ def test_calculate_seats(client, populate_party, token):
 def test_get_seats_no_parties(client, token):
     response = client.get('/seats?seat_count=1', headers={'Authorization': token})
     assert response.status_code == 404
-    assert response.json == {'msg': 'There are no parties to calculate seats'}
+    assert response.json == {
+        'error': 'Not Found',
+        'message': 'There are no parties to calculate seats'
+    }
