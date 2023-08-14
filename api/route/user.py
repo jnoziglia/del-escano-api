@@ -45,7 +45,7 @@ def add_user():
     except ValidationError as e:
         raise BadRequest('Invalid data to create a user')
     if user.create(user):
-        resp = user_schema.dump(user)
-        return resp, 201
+        return {'message': 'User created successfully. '
+                           'Use your email and password at /users/login to login to the API'}, 201
     else:
         raise ObjectAlreadyExists('User already exists')
