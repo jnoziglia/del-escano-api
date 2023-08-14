@@ -49,7 +49,7 @@ def edit_party(current_user, id):
     party.name = party_json['name'] if 'name' in party_json else party.name
     party.votes = party_json['votes'] if 'votes' in party_json else party.votes
     try:
-        party_obj = party_schema.load(request.get_json())
+        party_schema.load(request.get_json())
     except ValidationError as e:
         raise BadRequest('Invalid data to edit a party')
     party.save()

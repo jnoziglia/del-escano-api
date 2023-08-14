@@ -13,7 +13,7 @@ user_schema = UserSchema()
 def login():
     user_json = request.get_json()
     try:
-        user_obj = user_schema.load(user_json)
+        user_schema.load(user_json)
     except ValidationError as e:
         raise BadRequest('Invalid data to login')
     user = User.login(user_json['email'], user_json['password'])
