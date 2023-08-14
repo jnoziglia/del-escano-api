@@ -16,8 +16,7 @@ def login():
         try:
             # token should expire after 24 hrs
             token = jwt.encode(
-                {"user_id": user.id,
-                 "exp": datetime.utcnow() + timedelta(minutes=30)},
+                {"user_id": user.id},
                 current_app.config["SECRET_KEY"],
                 algorithm="HS256"
             )

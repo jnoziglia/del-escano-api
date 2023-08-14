@@ -8,3 +8,7 @@ class ObjectNotFound(AppErrorBaseClass):
 
 class BadRequest(AppErrorBaseClass):
     pass
+
+
+class ObjectAlreadyExists(AppErrorBaseClass):
+    pass

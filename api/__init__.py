@@ -74,3 +74,7 @@ def register_error_handlers(app):
     @app.errorhandler(BadRequest)
     def handle_bad_request_error(e):
         return jsonify({'msg': str(e)}), 400
+
+    @app.errorhandler(ObjectAlreadyExists)
+    def handle_object_already_exists_error(e):
+        return jsonify({'msg': str(e)}), 409

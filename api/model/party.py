@@ -21,3 +21,6 @@ class Party(db.Model, BaseModelMixin):
     def calculate_dhont_quot(self):
         quot = self.votes / (self.seats + 1)
         return quot
+
+    def already_exists(self):
+        return Party.query.filter_by(name=self.name).first() is not None

@@ -2,6 +2,7 @@ from flask import request, Blueprint
 from api.schema.party import PartySchema
 from api.model.party import Party
 from auth_middleware import token_required
+from api.common.error_handling import *
 
 party_bp = Blueprint('party_bp', __name__)
 party_fields = ('id', 'name', 'votes')
@@ -29,6 +30,8 @@ def get_party(current_user, id):
 @token_required
 def add_party(current_user):
     party = party_schema.load(request.get_json())
+    if party.already_exists():
+        raise ObjectAlreadyExists('Party already exists')
     party.save()
     resp = party_schema.dump(party)
     return resp, 201
